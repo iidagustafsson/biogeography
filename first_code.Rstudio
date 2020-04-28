@@ -231,3 +231,286 @@ v * 2
 v + v
 2  4  6  8 10 12 14 16 18 20
 
+-------------2020-04-28-------------
+How to build a matrix
+m <- matrix(rep(1, 9), nrow = 3) # matrix function
+m
+     [,1] [,2] [,3]
+[1,]    1    1    1
+[2,]    1    1    1
+[3,]    1    1    1
+
+Build a matrix of a vector, ranging from the number 1 - 9
+With 3 rows. 
+m <- matrix(1:9, nrow = 3, byrow = TRUE)
+m
+     [,1] [,2] [,3]
+[1,]    1    2    3
+[2,]    4    5    6
+[3,]    7    8    9
+
+m <- matrix(1:9, nrow = 3, byrow = FALSE)
+m
+     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+
+LETTERS
+"A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z"
+letters
+"a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z"
+
+m <- matrix(LETTERS[1:12], ncol = 3, byrow = FALSE)
+m
+    [,1] [,2] [,3]
+[1,] "A"  "E"  "I" 
+[2,] "B"  "F"  "J" 
+[3,] "C"  "G"  "K" 
+[4,] "D"  "H"  "L"
+
+byrow = TRUE - fill row by row
+byrow = FALSE - fill column by column
+
+Letters need to be in ". If you run H without ", you will get an error. 
+
+Inspecting and checking of matrix
+dim(m) # dim function
+How large is the object we are inspecting. The first number is rows, the second number is column 
+Consistent throughout R. It will provide us by a vector, of the number of rows and number of colums
+
+ dim(m) # dim function
+ 4 3
+ head(m,1) # head function
+ Will give us information about our matrix. 
+ The second number will indicate how many rows we will see.
+
+ To see the last row of our matrix 
+ tail(m,1)
+ 
+ When want to bind two vectors to one row
+ # rbind function
+ m <- rbind(c(1,2), c(1, 3)) 
+ m
+      [,1] [,2]
+[1,]    1    2
+[2,]    1    3
+
+# cbind function
+When want to bind two vectors to one column
+     [,1] [,2]
+[1,]    1    1
+[2,]    2    3
+
+Important! You need to have vectors with the same lenghts, you will end up with an error
+
+Number of rows
+nrow(m) 
+
+Number of columns
+(ncol(m)
+ 
+### Exercise 3, create a 5 X 4 matrix with only 1s in the 1st column, 2s in the 2nd and so on...
+m <- matrix(rep(1:5, each=5), ncol = 5, byrow = F)
+m
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    1    2    3    4    5
+[3,]    1    2    3    4    5
+[4,]    1    2    3    4    5
+[5,]    1    2    3    4    5
+
+### Exercise 3b, complete the previous task using rbind
+m <- rbind(1:4,1:4,1:4,1:4)
+m
+     [,1] [,2] [,3] [,4]
+[1,]    1    2    3    4
+[2,]    1    2    3    4
+[3,]    1    2    3    4
+[4,]    1    2    3    4
+
+m <- matrix(1:12, nrow = 2, byrow = T)
+m
+ 1    2    3    4    5    6
+ 7    8    9   10   11   12
+
+Accessing each row or column you want
+m[1, ]
+1 2 3 4 5 6
+
+m[, 2]
+2 8
+
+m[1, 6]
+6
+
+m[1]
+1
+
+m[2:4]
+7 2 8
+
+m[1, ] <- 6:1
+m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    6    5    4    3    2    1
+[2,]    7    8    9   10   11   12
+
+Which rows and columns are larger or equal to 6
+m >= 6
+     [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
+[1,] TRUE FALSE FALSE FALSE FALSE FALSE
+[2,] TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+
+Which are these numbers
+m[m >= 6]
+6  7  8  9 10 11 12
+
+class(m)
+"matrix"
+
+class(m[m >= 6])
+"integer"
+
+Force our vectors to become another class
+as.vector(m)
+6  7  5  8  4  9  3 10  2 11  1 12
+
+Seeing the numbers as characters
+as.character(m)
+"6"  "7"  "5"  "8"  "4"  "9"  "3"  "10" "2"  "11" "1"  "12"
+
+Forcing our vector to be a logical vector
+as.logical(m)
+TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+
+Rotaion of the matrix around the 
+t(m)
+     [,1] [,2]
+[1,]    6    7
+[2,]    5    8
+[3,]    4    9
+[4,]    3   10
+[5,]    2   11
+[6,]    1   12
+
+### Exercise 4, extract the third element of the second row from the following matrix
+
+m <- matrix(c(LETTERS[1:7], "Pippo", LETTERS[8:9]), nrow = 2, byrow = TRUE)
+m
+m[2,3]
+m
+"Pippo"
+
+### Operations with matrices
+
+m <- matrix(rep(1, 4), ncol = 2)
+m
+     [,1] [,2]
+[1,]    1    1
+[2,]    1    1
+
+m + 1
+     [,1] [,2]
+[1,]    2    2
+[2,]    2    2
+
+m + m
+     [,1] [,2]
+[1,]    2    2
+[2,]    2    2
+
+sqrt(m + m) # sqrt function
+         [,1]     [,2]
+[1,] 1.414214 1.414214
+[2,] 1.414214 1.414214
+
+m / 2
+     [,1] [,2]
+[1,]  0.5  0.5
+[2,]  0.5  0.5
+
+sum(m)
+4
+
+### Dataframes
+
+d <- data.frame(genus = c("Vulpes", "Felis", "Mustela", "Erithacus"),  # data.frame function
+                abundance = c(5, 3, 4, 10), 
+                has_fur = c(TRUE, TRUE, TRUE, FALSE))
+d
+      genus abundance has_fur
+1    Vulpes         5    TRUE
+2     Felis         3    TRUE
+3   Mustela         4    TRUE
+4 Erithacus        10   FALSE
+
+To check some information of our dataframe. Two columns
+head(d, 2)
+   genus abundance has_fur
+1 Vulpes         5    TRUE
+2  Felis         3    TRUE
+
+To check the structur of our dataframe/object. The datastructure, number of observation (rows) number of virables (columns)
+str(d) # str function
+'data.frame':	4 obs. of  3 variables:
+ $ genus    : Factor w/ 4 levels "Erithacus","Felis",..: 4 2 3 1
+ $ abundance: num  5 3 4 10
+ $ has_fur  : logi  TRUE TRUE TRUE FALSE
+ 
+To check how many rows and columns
+dim(d)
+4 3
+
+### Exercise 5, create a one-row dataframe with your name (= name), gender (= gender) and age (= age)
+### N.B. the number of "_" is just an example
+
+d <- data.frame(name = "Ida Gustafsson", gender = "Female", age = 27)
+d
+name gender age
+Ida Gustafsson Female  27
+
+### Subsetting and modifying dataframes
+
+d <- data.frame(genus = c("Vulpes", "Felis", "Mustela", "Erithacus"),  # data.frame function
+                abundance = c(5, 3, 4, 10), 
+                has_fur = c(TRUE, TRUE, TRUE, FALSE))
+d[2, ]
+genus abundance has_fur
+Felis         3    TRUE
+
+d[, 1]
+Vulpes    Felis     Mustela   Erithacus
+Levels: Erithacus Felis Mustela Vulpes
+
+d$genus
+Vulpes    Felis     Mustela   Erithacus
+Levels: Erithacus Felis Mustela Vulpes
+
+d$genus <- as.character(d$genus)
+d["genus"]
+     genus
+    Vulpes
+     Felis
+   Mustela
+ Erithacus
+
+d[c(2, 3), c(1, 3)]
+    genus has_fur
+    Felis    TRUE
+  Mustela    TRUE
+  
+d[4, 2] <- 12
+d
+     genus abundance has_fur
+    Vulpes         5    TRUE
+     Felis         3    TRUE
+   Mustela         4    TRUE
+ Erithacus        12   FALSE
+
+What matrix has the condition has fur equal to TRUE
+d[d$has_fur == TRUE, ] or d[d$has_fur == T, ]
+genus abundance has_fur
+  Vulpes         5    TRUE
+   Felis         3    TRUE
+ Mustela         4    TRUE
