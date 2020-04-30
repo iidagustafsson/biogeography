@@ -1,0 +1,135 @@
+Down load the data from iol
+Open R-studio
+
+Create our first R project
+Project in the right upper corner
+New Project
+New Directory
+New Project
+Pick the Directory name: (use simple and meaningful names)
+BioMac
+Pick a location of this directory: (a place that is easy to access)
+Den här datorn -> Dokument
+Create Project
+
+Create a new folder within the folder
+Give it the name: (lower case makes it easier)
+data
+
+Put the downloaded files into BioMac folder created
+
+Open the R code
+To open the file ctrl o
+Redirected to the BioMac folder
+Open the R_code_ex_02
+
+Install these packages
+install.packages("readxl")
+install.packages("vegan")
+install.packages("DescTools")
+
+
+Load/Recall the packages
+library(readxl)
+library(vegan)
+library(DescTools)
+
+Install software RTools
+
+### Import the dataset
+First specify the location of the data. Which is in our data folder
+Then the name of the file 41598_2017_5114_MOESM3_ESM.xls
+Need to specify which sheet to load from the file. Because first sheet does not has any data
+tab <- read_excel("data/41598_2017_5114_MOESM3_ESM.xls", sheet = 2, .name_repair = "minimal")
+
+### Let's take a look at the data structure
+See the number of rows and number of columns. First number is rows, seconds number is column
+dim(tab)
+1845   35
+
+See the structure of the dataset
+str(tab)
+
+See the first 6 rows of the dataset/table
+head(tab)
+The first 3 rows are problematic. Some rows and columns are empty
+Need to change name of the first 3 columns
+
+### Let's repair the table, we don't want empty rows or columns and we want MEANINGFUL column names
+We want to create the names of the columns
+Create a caracter vector. The first element is called Life_Form, Alien/Native, Species
+headers <- c("Life_Form", "Alien/Native", "Species")
+here we reshape ex novo the first three column names
+
+We want to paste the name of the islands with time period
+paste function : put together more than two strings
+sep = seperature by a blank space
+islands <- paste(names(tab)[4:ncol(tab)], tab[1, 4:ncol(tab)], sep = " ")
+here we combine island name and time period
+
+finally, we paste everything together
+headers <- c(headers, islands)
+
+Now we want to extract the useful data from the file
+We are going to all of our dataset, except for the first 3 rows
+head(tab)
+dim(tab)
+1842   35
+
+tab <- tab[4:nrow(tab), ]
+
+Assign the name headers into the new name names (tab)
+names(tab) <- headers
+
+### Let's give a check to the current table
+head(tab)
+
+dim(tab)
+1839   35
+
+str(tab)
+
+### Let's convert the occurence matrix to "integer", a particular case of "numeric" type
+sapply = simply by apply
+We call the result of this to species
+Assign everything to integer instead of character
+species <- sapply(tab[, 4:ncol(tab)], as.integer)
+
+Now we are going to bind our tables
+The one is called Tab the other one is called Species
+cbind function only works for matrixies
+we are going to use cbind.data.frame
+tab <- cbind.data.frame(tab[, 1:3], species)
+
+### Exercise 2, check the current data structure
+head(tab)
+dim(tab)
+str(tab)
+
+### The dataset is almost ready but there could be some errors, let's check if there's any NAs
+Ask R if there are any missing values: 
+anyNA function provies you a TRUE or FALSE
+FALSE = no missing values. TRUE = there are missing values
+anyNA(tab[, 1:3])
+FALSE
+
+Run also on the species
+anyNA(species)
+TRUE
+
+Gives you the index. The combination of rows and culumns. 
+The postition of the element that satisfy the NA
+which(is.na(species), arr.ind = T)
+row col
+29  13
+
+Now we need to fix this. Extract the particular cell that has the error
+Assign the 0 value to this cell
+species[which(is.na(species), arr.ind = T)] <- 0
+
+### Let's build the "final" dataset
+
+tab <- cbind.data.frame(tab[, 1:3], species)
+
+anyNA(tab)
+FALSE
