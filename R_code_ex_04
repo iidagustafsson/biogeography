@@ -1,0 +1,188 @@
+2020-05-15
+Install a new package
+It is called betapart
+It is particularly used in beta diversity measurements
+
+Load some previous installed packages
+library(vegan)
+library(betapart)
+
+We are goign to use another dataset inside Vegan
+Load the dataset Barrio Colorado Islands BCI
+data(BCI)
+
+Check the structure of the dataset
+Run the structure function
+str(BIC)
+
+= 50 plots and 225 species
+Only tree species
+
+Calculate the species richness by running the function: specnumber
+Assign it the name sr: species richness
+
+Remove the names
+names(sr) <- NULL        
+sr
+
+Check the distribution of the species richness
+To get an idea of what we are working on
+Get familiar with the dataset
+Plot the dataset
+Run the function: hist
+hist(sr)
+
+We see that the plots are really rich in species
+Frequency = how many plots have this value in species number
+sr = species number 
+
+Make the plot more beautiful
+hist(sr,breaks = 20,xlab = "Species Richness",ylab = "Number of plots",main = "")
+hist(sr,breaks = 10,xlab = "Species Richness",ylab = "Number of plots",main = "")
+
+To calculate the distance matrix
+Matrix showing the distance between each pair of plots
+We want to perform our abundance matrix into a presece/absence matrix
+
+A useful function from Vegan
+Transform the dataset into precense/abundande
+BCI <- decostand(BCI, "pa")
+
+Check our dataset
+str(BCI)
+Only 0 or 1 are present in our data set
+
+Run our first calcualtion on distance matrix
+vegetation distant function: vegdist
+vegdist(BCI[1:2, ], method = "jaccard")
+
+The cross between 1 and 2. The distance is 0.4336283
+How many pairs of distances do you get if you have 50 cities?
+(50*49)/2 = 1225
+
+Calculate the similarity
+By putting 1 - the same function
+1-vegdist(BCI[1:2, ], method = "jaccard")
+
+The similarity between 1 and 2 is 0,5663717
+
+We want to calculate the distance between plots that are more similar
+We calculate the distance between the first three plots
+The 1 and 2 plot, 1 and 3 plot and 2 and 3
+1         2
+2 0.4336283          
+3 0.4621849 0.4464286
+Most similar 1st and 2nd
+Most different 1st and 3rd
+
+We want to calculate the distances between all plots
+vegdist(BCI, method = "jaccard")
+
+hist(vegdist(BCI, method = "jaccard"),xlab = "Jaccard's dissimilarity metric",ylab = "Number of pairs",main = "")
+
+Change the method from jaccard to bray
+hist(vegdist(BCI, method = "bray"),
+     xlab = "Sorensen's dissimilarity metric",
+     ylab = "Number of pairs",
+     main = "")
+     
+Plot the both plots between each other
+par(mfrow = c(1, 2))
+hist(vegdist(BCI, method = "jaccard"),
+     xlab = "Jaccard's dissimilarity metric",
+     ylab = "Number of pairs",
+     main = "")
+hist(vegdist(BCI, method = "bray"),
+     xlab = "Sorensen's dissimilarity metric",
+     ylab = "Number of pairs",
+     main = "")
+par(mfrow = c(1, 1))
+
+
+Distance among the first 25 plots
+d1 <- vegdist(BCI[1:25, ])
+
+Distance among the last 25 plots
+d2 <- vegdist(BCI[26:50, ])
+
+Assign to the name d1 (distance one) and d2 (distance 2)
+
+We can not plot the two distances
+par(mfrow = c(1, 2))
+hist(d1)
+hist(d2)
+
+They are not identical, but very similar
+
+Testing for differences in means in both directions
+t.test(d1, d2) 
+
+data:  d1 and d2
+t = 3.9526, df = 597.12, p-value = 8.655e-05
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.007556092 0.022480345
+sample estimates:
+mean of x mean of y 
+0.3363310 0.3213128 
+
+low p-value because the plots (1-50) have many differences in topographic
+
+We can also test the differences in mean, if it is greater in d1 compated to 2
+t.test(d1, d2, alternative = "greater")
+data:  d1 and d2
+t = 3.9526, df = 597.12, p-value = 4.328e-05
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ 0.008758787         Inf
+sample estimates:
+mean of x mean of y 
+0.3363310 0.3213128 
+
+#### Exercise
+Exercise 1, use the given vector v to split the dataset into two subsets, calculate and plot SR for both
+### and test for significant differences in their mean value, do the same for jaccard abd sorensen distances
+### do the plots as 1X2 multiframe plots
+
+set.seed(42)
+v<-sample(1:50, 25)
+Will have a vector of lenght 25. With random number selected from the number in sequences 1-50
+
+seed(42)
+v<-sample(1:50, 25)
+set.seed(42)
+v <- sample(1:50, 25)
+d<-BCI[v,]
+f<-BCI[-v,]
+
+sr_d <- specnumber(d)
+sr_f <- specnumber(f)
+
+par(mfrow=c(1,2))
+hist(sr_d, xlim = c(75,110))
+hist(sr_f, xlim = c(75,110))
+
+t.test(sr_d,sr_f)
+
+jac_d <- vegdist(d, method = "jaccard")
+jac_f <- vegdist(f, method = "jaccard")
+
+par(mfrow=c(1,2))
+hist(jac_d)
+hist(jac_f)
+
+t.test(jac_d, jac_f)
+
+sor_d <- vegdist(d, method = "bray")
+sor_f <- vegdist(f, method = "bray")
+
+par(mfrow=c(1,2))
+hist(sor_d)
+hist(sor_f)
+t.test(sor_d,sor_f)
+
+### Exercise 1b, use "Stream" from BCI.env to split the dataset and repeat the calculations, plots and tests
+### you did in the previous exercise
+
+
+
